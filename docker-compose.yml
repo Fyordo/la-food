@@ -1,0 +1,29 @@
+version: "3.6"
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: .docker/pgsql/Dockerfile
+    restart: always
+    container_name: ${APP_NAME}-db
+    env_file:
+      - ".env.local"
+    networks:
+      la-network:
+        aliases:
+          - db.${DOCKER_NETWORK}
+    ports:
+      - ${OUTER_DB_PORT}:${DB_PORT}
+    environment:
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./.docker/postgres/datadir:/var/lib/postgresql/data
+
+
+networks:
+  la-network:
+    external: true
+    name: ${DOCKER_NETWORK}
