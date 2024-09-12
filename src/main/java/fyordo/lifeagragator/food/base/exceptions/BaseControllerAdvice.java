@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Map;
+
 @ControllerAdvice
 public class BaseControllerAdvice {
     @ExceptionHandler(ModelNotFoundException.class)
@@ -12,7 +14,7 @@ public class BaseControllerAdvice {
     }
 
     @ExceptionHandler(Throwable.class)
-    public ResponseEntity<?> handleOtherExceptions(){
-        return ResponseEntity.internalServerError().build();
+    public ResponseEntity<?> handleOtherExceptions(Throwable throwable){
+        return ResponseEntity.internalServerError().body(Map.of("error", throwable.getMessage()));
     }
 }

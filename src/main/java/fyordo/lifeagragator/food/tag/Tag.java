@@ -2,8 +2,11 @@ package fyordo.lifeagragator.food.tag;
 
 import fyordo.lifeagragator.food.dish.Dish;
 import fyordo.lifeagragator.food.ingredient.Ingredient;
+import fyordo.lifeagragator.food.tag.request.TagCreateRequest;
+import fyordo.lifeagragator.food.tag.request.TagUpdateRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.LinkedHashSet;
@@ -13,6 +16,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "tag")
+@NoArgsConstructor
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +38,14 @@ public class Tag {
     @ManyToMany(mappedBy = "tags", cascade = {CascadeType.PERSIST, CascadeType.DETACH})
     private Set<Dish> dishes = new LinkedHashSet<>();
 
+    public Tag(TagCreateRequest data){
+        title = data.getTitle();
+        color = data.getColor();
+    }
+
+    public Tag(TagUpdateRequest data){
+        id = data.getId();
+        title = data.getTitle();
+        color = data.getColor();
+    }
 }
