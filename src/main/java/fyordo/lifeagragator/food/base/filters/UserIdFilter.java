@@ -1,4 +1,4 @@
-package fyordo.lifeagragator.food.filters;
+package fyordo.lifeagragator.food.base.filters;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
