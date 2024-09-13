@@ -8,6 +8,7 @@ import fyordo.lifeagragator.food.tag.request.TagCreateRequest;
 import fyordo.lifeagragator.food.tag.request.TagUpdateRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.LinkedHashSet;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "ingredient")
 public class Ingredient {
     @Id
@@ -26,8 +28,7 @@ public class Ingredient {
     @Column(name = "title", length = 31, nullable = false)
     private String title;
 
-    @Lob
-    @Column(name = "description", nullable = true)
+    @Column(name = "description", length = 255, nullable = true)
     private String description;
 
     @Column(name = "created_user_id", nullable = false)

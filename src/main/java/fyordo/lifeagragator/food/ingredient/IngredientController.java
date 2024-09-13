@@ -5,6 +5,7 @@ import fyordo.lifeagragator.food.ingredient.dto.IngredientDto;
 import fyordo.lifeagragator.food.ingredient.request.IngredientCreateRequest;
 import fyordo.lifeagragator.food.ingredient.request.IngredientUpdateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,13 @@ public class IngredientController {
     public ResponseEntity<IngredientDto> updateIngredient(@RequestBody IngredientUpdateRequest request){
         return ResponseEntity.status(201).body(
                 new IngredientDto(ingredientService.updateIngredient(request))
+        );
+    }
+
+    @PutMapping("/{ingredientId}/add-tag/{tagId}")
+    public ResponseEntity<IngredientDto> addTagToIngredient(@PathVariable Long ingredientId, @PathVariable Long tagId){
+        return ResponseEntity.ok(
+                new IngredientDto(ingredientService.addTagToIngredient(ingredientId, tagId))
         );
     }
 

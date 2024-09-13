@@ -4,6 +4,7 @@ import fyordo.lifeagragator.food.base.exceptions.ModelNotFoundException;
 import fyordo.lifeagragator.food.base.utils.WorkspaceUtils;
 import fyordo.lifeagragator.food.ingredient.request.IngredientCreateRequest;
 import fyordo.lifeagragator.food.ingredient.request.IngredientUpdateRequest;
+import fyordo.lifeagragator.food.tag.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class IngredientService {
     private final IngredientRepository ingredientRepository;
+    private final TagService tagService;
 
     public List<Ingredient> getIngredients(){
         return ingredientRepository.findAcessable(WorkspaceUtils.getUserId());
@@ -37,6 +39,15 @@ public class IngredientService {
 
         Ingredient ingredient = new Ingredient(data);
         ingredient.setCreatedUserId(WorkspaceUtils.getUserId());
+        return ingredientRepository.save(ingredient);
+    }
+
+    public Ingredient addTagToIngredient(Long tagId, Long ingredientId){
+        Ingredient ingredient = getIngredientById(ingredientId);
+        ingredient.getTags().add(
+                tagService.getTagById(tagId)
+        );
+
         return ingredientRepository.save(ingredient);
     }
 
