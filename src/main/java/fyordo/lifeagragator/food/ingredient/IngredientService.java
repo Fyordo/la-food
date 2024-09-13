@@ -4,6 +4,7 @@ import fyordo.lifeagragator.food.base.exceptions.ModelNotFoundException;
 import fyordo.lifeagragator.food.base.utils.WorkspaceUtils;
 import fyordo.lifeagragator.food.ingredient.request.IngredientCreateRequest;
 import fyordo.lifeagragator.food.ingredient.request.IngredientUpdateRequest;
+import fyordo.lifeagragator.food.tag.Tag;
 import fyordo.lifeagragator.food.tag.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,13 @@ public class IngredientService {
         ingredient.getTags().add(
                 tagService.getTagById(tagId)
         );
+
+        return ingredientRepository.save(ingredient);
+    }
+
+    public Ingredient removeTagFromIngredient(Long tagId, Long ingredientId){
+        Ingredient ingredient = getIngredientById(ingredientId);
+        ingredient.getTags().removeIf((Tag tag) -> Objects.equals(tag.getId(), tagId));
 
         return ingredientRepository.save(ingredient);
     }

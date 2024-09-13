@@ -50,6 +50,13 @@ public class IngredientController {
         );
     }
 
+    @PutMapping("/{ingredientId}/remove-tag/{tagId}")
+    public ResponseEntity<IngredientDto> removeTagFromIngredient(@PathVariable Long ingredientId, @PathVariable Long tagId){
+        return ResponseEntity.ok(
+                new IngredientDto(ingredientService.removeTagFromIngredient(ingredientId, tagId))
+        );
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteIngredient(@PathVariable Long id){
         ingredientService.deleteIngredientById(id);
