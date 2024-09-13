@@ -1,6 +1,7 @@
 package fyordo.lifeagragator.food.tag;
 
 import fyordo.lifeagragator.food.base.reponse.ListResponse;
+import fyordo.lifeagragator.food.tag.dto.TagDto;
 import fyordo.lifeagragator.food.tag.request.TagCreateRequest;
 import fyordo.lifeagragator.food.tag.request.TagUpdateRequest;
 import lombok.RequiredArgsConstructor;

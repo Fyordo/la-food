@@ -1,5 +1,6 @@
-package fyordo.lifeagragator.food.tag;
+package fyordo.lifeagragator.food.tag.dto;
 
+import fyordo.lifeagragator.food.tag.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

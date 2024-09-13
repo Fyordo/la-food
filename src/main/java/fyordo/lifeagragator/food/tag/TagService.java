@@ -4,7 +4,6 @@ import fyordo.lifeagragator.food.base.exceptions.ModelNotFoundException;
 import fyordo.lifeagragator.food.base.utils.WorkspaceUtils;
 import fyordo.lifeagragator.food.tag.request.TagCreateRequest;
 import fyordo.lifeagragator.food.tag.request.TagUpdateRequest;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
