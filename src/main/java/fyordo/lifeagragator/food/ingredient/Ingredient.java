@@ -1,7 +1,11 @@
 package fyordo.lifeagragator.food.ingredient;
 
 import fyordo.lifeagragator.food.dish.DishIngredient;
+import fyordo.lifeagragator.food.ingredient.request.IngredientCreateRequest;
+import fyordo.lifeagragator.food.ingredient.request.IngredientUpdateRequest;
 import fyordo.lifeagragator.food.tag.Tag;
+import fyordo.lifeagragator.food.tag.request.TagCreateRequest;
+import fyordo.lifeagragator.food.tag.request.TagUpdateRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,4 +42,15 @@ public class Ingredient {
     @OneToMany(mappedBy = "ingredient", orphanRemoval = true)
     private Set<DishIngredient> dishIngredients = new LinkedHashSet<>();
 
+
+    public Ingredient(IngredientCreateRequest data){
+        title = data.getTitle();
+        description = data.getDescription();
+    }
+
+    public Ingredient(IngredientUpdateRequest data){
+        id = data.getId();
+        title = data.getTitle();
+        description = data.getDescription();
+    }
 }
