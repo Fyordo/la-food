@@ -3,14 +3,15 @@ package fyordo.lifeagragator.food.ingredient;
 import fyordo.lifeagragator.food.base.reponse.ListResponse;
 import fyordo.lifeagragator.food.ingredient.dto.IngredientDto;
 import fyordo.lifeagragator.food.ingredient.request.IngredientCreateRequest;
+import fyordo.lifeagragator.food.ingredient.request.IngredientFilter;
 import fyordo.lifeagragator.food.ingredient.request.IngredientUpdateRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller()
 @RequiredArgsConstructor
@@ -19,8 +20,11 @@ public class IngredientController {
     private final IngredientService ingredientService;
 
     @GetMapping("")
-    public ResponseEntity<ListResponse<IngredientDto>> getAllIngredients(){
-        List<IngredientDto> result = ingredientService.getIngredients().stream().map(IngredientDto::new).toList();
+    public ResponseEntity<ListResponse<IngredientDto>> getAllIngredients(@RequestParam Map<String, String> filter, @RequestParam(required = false) List<Long> tagIds){
+        IngredientFilter ingredientFilter = new IngredientFilter(filter);
+        ingredientFilter.setTagIds(tagIds);
+
+        List<IngredientDto> result = ingredientService.getIngredients(ingredientFilter).stream().map(IngredientDto::new).toList();
         return ResponseEntity.ok(new ListResponse<>(result));
     }
 

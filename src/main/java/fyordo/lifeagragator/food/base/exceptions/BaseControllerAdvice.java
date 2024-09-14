@@ -9,12 +9,17 @@ import java.util.Map;
 @ControllerAdvice
 public class BaseControllerAdvice {
     @ExceptionHandler(ModelNotFoundException.class)
-    public ResponseEntity<?> handleNotFound(){
+    public ResponseEntity<?> handleNotFound() {
         return ResponseEntity.badRequest().build();
     }
 
     @ExceptionHandler(Throwable.class)
-    public ResponseEntity<?> handleOtherExceptions(Throwable throwable){
-        return ResponseEntity.internalServerError().body(Map.of("error", throwable.getMessage()));
+    public ResponseEntity<?> handleOtherExceptions(Throwable throwable) {
+        return ResponseEntity.internalServerError().body(
+                Map.of(
+                        "error", throwable.getMessage(),
+                        "trace", throwable.getStackTrace()
+                )
+        );
     }
 }
