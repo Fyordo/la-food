@@ -1,8 +1,8 @@
 package fyordo.lifeagragator.food.dish;
 
 import fyordo.lifeagragator.food.base.reponse.ListResponse;
-import fyordo.lifeagragator.food.dish.DishService;
 import fyordo.lifeagragator.food.dish.dto.DishDto;
+import fyordo.lifeagragator.food.dish.request.DishAndIngredientRequest;
 import fyordo.lifeagragator.food.dish.request.DishCreateRequest;
 import fyordo.lifeagragator.food.dish.request.DishFilter;
 import fyordo.lifeagragator.food.dish.request.DishUpdateRequest;
@@ -21,7 +21,7 @@ public class DishController {
     private final DishService dishService;
 
     @GetMapping("")
-    public ResponseEntity<ListResponse<DishDto>> getAllDishs(@RequestParam Map<String, String> filter, @RequestParam(required = false) List<Long> tagIds){
+    public ResponseEntity<ListResponse<DishDto>> getAllDishes(@RequestParam Map<String, String> filter, @RequestParam(required = false) List<Long> tagIds){
         DishFilter dishFilter = new DishFilter(filter);
         dishFilter.setTagIds(tagIds);
 
@@ -55,16 +55,29 @@ public class DishController {
         );
     }
 
-    /*@PutMapping("/{dishId}/remove-tag/{tagId}")
+    @PutMapping("/{dishId}/remove-tag/{tagId}")
     public ResponseEntity<DishDto> removeTagFromDish(@PathVariable Long dishId, @PathVariable Long tagId){
         return ResponseEntity.ok(
                 new DishDto(dishService.removeTagFromDish(dishId, tagId))
         );
-    }*/
+    }
+
+    @PutMapping("/add-ingredient")
+    public ResponseEntity<DishDto> addIngredientToDish(@RequestBody DishAndIngredientRequest data){
+        return ResponseEntity.ok(
+                new DishDto(dishService.addIngredientToDish(data.getIngredientId(), data.getDishId(), data.getDescription()))
+        );
+    }
+
+    @PutMapping("/remove-ingredient")
+    public ResponseEntity<?> removeIngredientFromDish(@RequestBody DishAndIngredientRequest data){
+        dishService.removeIngredientFromDish(data.getIngredientId(), data.getDishId());
+        return ResponseEntity.noContent().build();
+    }
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteDish(@PathVariable Long id){
         dishService.deleteDishById(id);
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.noContent().build();
     }
 }

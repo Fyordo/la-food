@@ -86,6 +86,13 @@ public class DishService {
         return dishRepository.save(dish);
     }
 
+    public Dish removeTagFromDish(Long tagId, Long dishId){
+        Dish dish = getDishById(dishId);
+        dish.getTags().removeIf((Tag tag) -> Objects.equals(tag.getId(), tagId));
+
+        return dishRepository.save(dish);
+    }
+
     public Dish addIngredientToDish(Long ingredientId, Long dishId, String description){
         Dish dish = getDishById(dishId);
         Ingredient ingredient = ingredientService.getIngredientById(ingredientId);
@@ -100,10 +107,11 @@ public class DishService {
         return dishRepository.save(dish);
     }
 
-    /*public Dish removeIngredientFromDish(Long ingredientId, Long dishId){
-
-        return dishRepository.save(dish);
-    }*/
+    public void removeIngredientFromDish(Long ingredientId, Long dishId){
+        dishIngredientRepository.deleteAll(
+                dishIngredientRepository.findByDishIdAndIngredientId(dishId, ingredientId)
+        );
+    }
 
     public void deleteDishById(Long id){
         Dish dish = getDishById(id);
