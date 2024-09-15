@@ -12,4 +12,7 @@ public class TagCreateRequest {
 
     @NonNull
     private String color;
+
+    @NonNull
+    private String textColor;
 }

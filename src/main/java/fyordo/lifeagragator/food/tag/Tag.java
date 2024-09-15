@@ -29,6 +29,9 @@ public class Tag {
     @Column(name = "color", length = 7, nullable = false)
     private String color;
 
+    @Column(name = "text_color", length = 7, nullable = false)
+    private String textColor;
+
     @Column(name = "created_user_id", nullable = false)
     private Long createdUserId;
 
@@ -41,11 +44,13 @@ public class Tag {
     public Tag(TagCreateRequest data){
         title = data.getTitle();
         color = data.getColor();
+        textColor = data.getTextColor();
     }
 
     public Tag(TagUpdateRequest data){
         id = data.getId();
         title = data.getTitle();
         color = data.getColor();
+        textColor = data.getTextColor();
     }
 }
