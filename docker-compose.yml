@@ -1,6 +1,26 @@
 version: "3.6"
 
 services:
+  app:
+    entrypoint: java -jar la-food.jar
+    container_name: ${APP_NAME}-app
+    build:
+      context: .
+      dockerfile: .docker/java/Dockerfile
+    restart: always
+    ports:
+      - "8082:8080"
+    networks:
+      la-network:
+        aliases:
+          - app.${DOCKER_NETWORK}
+    env_file:
+      - .env
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:${DB_PORT}/${DB_DATABASE}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
   db:
     build:
       context: .
