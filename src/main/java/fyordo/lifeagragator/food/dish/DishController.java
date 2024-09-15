@@ -55,12 +55,12 @@ public class DishController {
         );
     }
 
-    @PutMapping("/{dishId}/remove-tag/{tagId}")
+    /*@PutMapping("/{dishId}/remove-tag/{tagId}")
     public ResponseEntity<DishDto> removeTagFromDish(@PathVariable Long dishId, @PathVariable Long tagId){
         return ResponseEntity.ok(
                 new DishDto(dishService.removeTagFromDish(dishId, tagId))
         );
-    }
+    }*/
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteDish(@PathVariable Long id){

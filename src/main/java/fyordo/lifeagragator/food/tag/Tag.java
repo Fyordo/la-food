@@ -29,7 +29,7 @@ public class Tag {
     @Column(name = "color", length = 7, nullable = false)
     private String color;
 
-    @Column(name = "text_color", length = 7, nullable = false)
+    @Column(name = "text_color", length = 7)
     private String textColor;
 
     @Column(name = "created_user_id", nullable = false)

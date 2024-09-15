@@ -25,12 +25,10 @@ public class Dish {
     @Column(name = "title", length = 31, nullable = false)
     private String title;
 
-    @Lob
     @Column(name = "description", nullable = true)
     private String description;
 
-    @Lob
-    @Column(name = "receipt", nullable = true)
+    @Column(name = "receipt", nullable = true, length = 2047)
     private String receipt;
 
     @Column(name = "created_user_id", nullable = false)

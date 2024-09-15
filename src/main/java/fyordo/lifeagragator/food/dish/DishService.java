@@ -6,6 +6,8 @@ import fyordo.lifeagragator.food.base.utils.WorkspaceUtils;
 import fyordo.lifeagragator.food.dish.request.DishCreateRequest;
 import fyordo.lifeagragator.food.dish.request.DishFilter;
 import fyordo.lifeagragator.food.dish.request.DishUpdateRequest;
+import fyordo.lifeagragator.food.ingredient.Ingredient;
+import fyordo.lifeagragator.food.ingredient.IngredientService;
 import fyordo.lifeagragator.food.tag.Tag;
 import fyordo.lifeagragator.food.tag.TagService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class DishService {
     private final DishRepository dishRepository;
+    private final DishIngredientRepository dishIngredientRepository;
     private final TagService tagService;
+    private final IngredientService ingredientService;
 
     public List<Dish> getDishes(DishFilter dishFilter){
         return (List<Dish>) dishRepository
@@ -82,12 +86,24 @@ public class DishService {
         return dishRepository.save(dish);
     }
 
-    public Dish removeTagFromDish(Long tagId, Long dishId){
+    public Dish addIngredientToDish(Long ingredientId, Long dishId, String description){
         Dish dish = getDishById(dishId);
-        dish.getTags().removeIf((Tag tag) -> Objects.equals(tag.getId(), tagId));
+        Ingredient ingredient = ingredientService.getIngredientById(ingredientId);
+        DishIngredient dishIngredient = new DishIngredient();
+        dishIngredient.setDish(dish);
+        dishIngredient.setIngredient(ingredient);
+        dishIngredient.setDescription(description);
+        dishIngredient = dishIngredientRepository.save(dishIngredient);
+
+        dish.getDishIngredients().add(dishIngredient);
 
         return dishRepository.save(dish);
     }
+
+    /*public Dish removeIngredientFromDish(Long ingredientId, Long dishId){
+
+        return dishRepository.save(dish);
+    }*/
 
     public void deleteDishById(Long id){
         Dish dish = getDishById(id);
