@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -34,11 +35,11 @@ public class Ingredient {
     @Column(name = "created_user_id", nullable = false)
     private Long createdUserId;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH})
     @JoinTable(name = "ingredient_tags",
             joinColumns = @JoinColumn(name = "ingredient_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags = new LinkedHashSet<>();
+    private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "ingredient", orphanRemoval = true)
     private Set<DishIngredient> dishIngredients = new LinkedHashSet<>();

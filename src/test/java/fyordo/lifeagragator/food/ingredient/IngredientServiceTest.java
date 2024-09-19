@@ -4,6 +4,9 @@ import fyordo.lifeagragator.food.base.utils.WorkspaceUtils;
 import fyordo.lifeagragator.food.ingredient.request.IngredientCreateRequest;
 import fyordo.lifeagragator.food.ingredient.request.IngredientFilter;
 import fyordo.lifeagragator.food.ingredient.request.IngredientUpdateRequest;
+import fyordo.lifeagragator.food.tag.Tag;
+import fyordo.lifeagragator.food.tag.TagService;
+import fyordo.lifeagragator.food.tag.request.TagCreateRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -19,6 +22,9 @@ public class IngredientServiceTest {
 
     @Autowired
     private IngredientService ingredientService;
+
+    @Autowired
+    private TagService tagService;
 
     @Test
     public void testCreateIngredient() {
@@ -137,6 +143,53 @@ public class IngredientServiceTest {
             ingredientService.deleteIngredientById(ingredient1.getId());
             ingredientService.deleteIngredientById(ingredient2.getId());
             ingredientService.deleteIngredientById(ingredient3.getId());
+        }
+    }
+
+    @Test
+    public void testAddTagToIngredient() {
+        try (MockedStatic<WorkspaceUtils> mockedStatic = Mockito.mockStatic(WorkspaceUtils.class)) {
+            mockedStatic.when(WorkspaceUtils::getUserId).thenReturn(1L);
+            IngredientCreateRequest data = new IngredientCreateRequest(
+                    "TEST_TITLE", "TEST_DESCRIPTION"
+            );
+            TagCreateRequest dataTag = new TagCreateRequest(
+                    "TEST_TAG", "#000000", "#000000"
+            );
+
+            Ingredient resultIngredient = ingredientService.createIngredient(data);
+            Tag resultTag = tagService.createTag(dataTag);
+
+            resultIngredient = ingredientService.addTagToIngredient(resultTag.getId(), resultIngredient.getId());
+
+            assertEquals(1, resultIngredient.getTags().size());
+            ingredientService.deleteIngredientById(resultIngredient.getId());
+            tagService.deleteTagById(resultTag.getId());
+        }
+    }
+
+    @Test
+    public void testRemoveTagFromIngredient() {
+        try (MockedStatic<WorkspaceUtils> mockedStatic = Mockito.mockStatic(WorkspaceUtils.class)) {
+            mockedStatic.when(WorkspaceUtils::getUserId).thenReturn(1L);
+            IngredientCreateRequest data = new IngredientCreateRequest(
+                    "TEST_TITLE", "TEST_DESCRIPTION"
+            );
+            TagCreateRequest dataTag = new TagCreateRequest(
+                    "TEST_TAG", "#000000", "#000000"
+            );
+
+            Ingredient resultIngredient = ingredientService.createIngredient(data);
+            Tag resultTag = tagService.createTag(dataTag);
+
+            resultIngredient = ingredientService.addTagToIngredient(resultTag.getId(), resultIngredient.getId());
+            assertEquals(1, resultIngredient.getTags().size());
+
+            resultIngredient = ingredientService.removeTagFromIngredient(resultTag.getId(), resultIngredient.getId());
+            assertEquals(0, resultIngredient.getTags().size());
+
+            ingredientService.deleteIngredientById(resultIngredient.getId());
+            tagService.deleteTagById(resultTag.getId());
         }
     }
 }
