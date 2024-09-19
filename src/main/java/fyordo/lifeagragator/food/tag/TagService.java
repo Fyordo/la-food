@@ -3,7 +3,6 @@ package fyordo.lifeagragator.food.tag;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import fyordo.lifeagragator.food.base.exceptions.ModelNotFoundException;
 import fyordo.lifeagragator.food.base.utils.WorkspaceUtils;
-import fyordo.lifeagragator.food.dish.request.DishFilter;
 import fyordo.lifeagragator.food.tag.request.TagCreateRequest;
 import fyordo.lifeagragator.food.tag.request.TagFilter;
 import fyordo.lifeagragator.food.tag.request.TagUpdateRequest;

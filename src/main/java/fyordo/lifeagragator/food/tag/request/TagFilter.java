@@ -14,12 +14,12 @@ import java.util.Map;
 @NoArgsConstructor
 public class TagFilter {
     @Nullable
-    private String search;
+    private String search = null;
 
-    private Boolean onlyMy;
+    private Boolean onlyMy = true;
 
     public TagFilter(Map<String, String> queryFilter){
         search = queryFilter.getOrDefault("search", null);
-        onlyMy = Boolean.parseBoolean(queryFilter.getOrDefault("onlyMy", String.valueOf(true)));
+        onlyMy = Boolean.parseBoolean(queryFilter.get("onlyMy"));
     }
 }

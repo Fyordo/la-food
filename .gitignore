@@ -34,3 +34,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/test_food.mv.db
+/test_food.trace.db
