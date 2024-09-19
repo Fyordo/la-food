@@ -34,7 +34,7 @@ public class Dish {
     @Column(name = "created_user_id", nullable = false)
     private Long createdUserId;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH})
     @JoinTable(name = "dish_tags",
             joinColumns = @JoinColumn(name = "dish_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
