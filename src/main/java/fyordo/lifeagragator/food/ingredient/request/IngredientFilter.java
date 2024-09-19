@@ -18,11 +18,11 @@ public class IngredientFilter {
 
     private List<Long> tagIds;
 
-    private Boolean onlyMy;
+    private Boolean onlyMy = true;
 
     public IngredientFilter(Map<String, String> queryFilter){
         tagIds = new ArrayList<>();
         search = queryFilter.getOrDefault("search", null);
-        onlyMy = Boolean.parseBoolean(queryFilter.getOrDefault("onlyMy", String.valueOf(true)));
+        onlyMy = Boolean.parseBoolean(queryFilter.get("onlyMy"));
     }
 }
