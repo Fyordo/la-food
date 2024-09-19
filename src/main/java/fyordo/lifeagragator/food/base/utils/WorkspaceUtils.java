@@ -14,6 +14,11 @@ public class WorkspaceUtils {
         HttpServletRequest request = attributes.getRequest();
         HttpSession httpSession = request.getSession(true);
 
-        return Long.valueOf((String)httpSession.getAttribute("userId"));
+        var attribute = httpSession.getAttribute("userId");
+        if (attribute == null){
+            return null;
+        }
+
+        return Long.valueOf((String)attribute);
     }
 }
