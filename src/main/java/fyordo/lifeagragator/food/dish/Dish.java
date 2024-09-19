@@ -40,7 +40,7 @@ public class Dish {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "dish", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "dish", orphanRemoval = true)
     private Set<DishIngredient> dishIngredients = new LinkedHashSet<>();
 
     public Dish(DishCreateRequest data){

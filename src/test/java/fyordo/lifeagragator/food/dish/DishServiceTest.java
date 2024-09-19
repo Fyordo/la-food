@@ -4,6 +4,9 @@ import fyordo.lifeagragator.food.base.utils.WorkspaceUtils;
 import fyordo.lifeagragator.food.dish.request.DishCreateRequest;
 import fyordo.lifeagragator.food.dish.request.DishFilter;
 import fyordo.lifeagragator.food.dish.request.DishUpdateRequest;
+import fyordo.lifeagragator.food.ingredient.Ingredient;
+import fyordo.lifeagragator.food.ingredient.IngredientService;
+import fyordo.lifeagragator.food.ingredient.request.IngredientCreateRequest;
 import fyordo.lifeagragator.food.tag.Tag;
 import fyordo.lifeagragator.food.tag.TagService;
 import fyordo.lifeagragator.food.tag.request.TagCreateRequest;
@@ -25,6 +28,9 @@ public class DishServiceTest {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private IngredientService ingredientService;
 
     @Test
     public void testCreateDish() {
@@ -190,6 +196,65 @@ public class DishServiceTest {
 
             dishService.deleteDishById(resultDish.getId());
             tagService.deleteTagById(resultTag.getId());
+        }
+    }
+
+    @Test
+    public void testAddIngredientToDish() {
+        try (MockedStatic<WorkspaceUtils> mockedStatic = Mockito.mockStatic(WorkspaceUtils.class)) {
+            mockedStatic.when(WorkspaceUtils::getUserId).thenReturn(1L);
+            DishCreateRequest data = new DishCreateRequest(
+                    "TEST_TITLE", "TEST_DESCRIPTION", "TEST_RECEIPT"
+            );
+            IngredientCreateRequest dataIngredient = new IngredientCreateRequest(
+                    "TEST_TITLE", "TEST_DESCRIPTION"
+            );
+
+            Dish resultDish = dishService.createDish(data);
+            Ingredient resultIngredient = ingredientService.createIngredient(dataIngredient);
+
+            resultDish = dishService.addIngredientToDish(
+                    resultIngredient.getId(),
+                    resultDish.getId(),
+                    "test_desc"
+            );
+            assertEquals(1, resultDish.getDishIngredients().size());
+            assertEquals("test_desc", resultDish.getDishIngredients().stream().findFirst().get().getDescription());
+
+            dishService.deleteDishById(resultDish.getId());
+            ingredientService.deleteIngredientById(resultIngredient.getId());
+        }
+    }
+
+    @Test
+    public void testRemoveIngredientFromDish() {
+        try (MockedStatic<WorkspaceUtils> mockedStatic = Mockito.mockStatic(WorkspaceUtils.class)) {
+            mockedStatic.when(WorkspaceUtils::getUserId).thenReturn(1L);
+            DishCreateRequest data = new DishCreateRequest(
+                    "TEST_TITLE", "TEST_DESCRIPTION", "TEST_RECEIPT"
+            );
+            IngredientCreateRequest dataIngredient = new IngredientCreateRequest(
+                    "TEST_TITLE", "TEST_DESCRIPTION"
+            );
+
+            Dish resultDish = dishService.createDish(data);
+            Ingredient resultIngredient = ingredientService.createIngredient(dataIngredient);
+
+            dishService.addIngredientToDish(
+                    resultIngredient.getId(),
+                    resultDish.getId(),
+                    "test_desc"
+            );
+
+            resultDish = dishService.getDishById(resultDish.getId());
+            assertEquals(1, dishService.getDishById(resultDish.getId()).getDishIngredients().size());
+            assertEquals("test_desc", resultDish.getDishIngredients().stream().findFirst().get().getDescription());
+
+            dishService.removeIngredientFromDish(resultIngredient.getId(), resultDish.getId());
+            assertEquals(0, dishService.getDishById(resultDish.getId()).getTags().size());
+
+            dishService.deleteDishById(resultDish.getId());
+            ingredientService.deleteIngredientById(resultIngredient.getId());
         }
     }
 }

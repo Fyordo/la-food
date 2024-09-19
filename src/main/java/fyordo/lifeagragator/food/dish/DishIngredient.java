@@ -26,11 +26,11 @@ public class DishIngredient {
     @Column(name = "description", nullable = true)
     private String description;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "dish_id")
     private Dish dish;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
