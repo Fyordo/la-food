@@ -3,6 +3,7 @@ package fyordo.lifeagragator.food.tag;
 import fyordo.lifeagragator.food.base.reponse.ListResponse;
 import fyordo.lifeagragator.food.tag.dto.TagDto;
 import fyordo.lifeagragator.food.tag.request.TagCreateRequest;
+import fyordo.lifeagragator.food.tag.request.TagFilter;
 import fyordo.lifeagragator.food.tag.request.TagUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller()
 @RequiredArgsConstructor
@@ -17,8 +19,9 @@ import java.util.List;
 public class TagController {
     private final TagService tagService;
     @GetMapping("")
-    public ResponseEntity<ListResponse<TagDto>> getAllTags(){
-        List<TagDto> result = tagService.getTags().stream().map(TagDto::new).toList();
+    public ResponseEntity<ListResponse<TagDto>> getAllTags(@RequestParam Map<String, String> filter){
+        TagFilter tagFilter = new TagFilter(filter);
+        List<TagDto> result = tagService.getTags(tagFilter).stream().map(TagDto::new).toList();
         return ResponseEntity.ok(new ListResponse<>(result));
     }
 

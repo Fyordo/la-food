@@ -1,8 +1,11 @@
 package fyordo.lifeagragator.food.tag;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import fyordo.lifeagragator.food.base.exceptions.ModelNotFoundException;
 import fyordo.lifeagragator.food.base.utils.WorkspaceUtils;
+import fyordo.lifeagragator.food.dish.request.DishFilter;
 import fyordo.lifeagragator.food.tag.request.TagCreateRequest;
+import fyordo.lifeagragator.food.tag.request.TagFilter;
 import fyordo.lifeagragator.food.tag.request.TagUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,9 +18,26 @@ import java.util.Objects;
 public class TagService {
     private final TagRepository tagRepository;
 
-    public List<Tag> getTags(){
-        return tagRepository.findAcessable(WorkspaceUtils.getUserId());
+    public List<Tag> getTags(TagFilter tagFilter){
+        return (List<Tag>)tagRepository
+                .findAll(generateFilter(tagFilter));
     }
+
+    private BooleanExpression generateFilter(TagFilter tagFilter) {
+        QTag qTag = QTag.tag;
+        BooleanExpression result = qTag.isNotNull();
+
+        if (tagFilter.getOnlyMy()){
+            result = result.and(qTag.createdUserId.eq(WorkspaceUtils.getUserId()));
+        }
+
+        if (tagFilter.getSearch() != null){
+            result = result.and(qTag.title.containsIgnoreCase(tagFilter.getSearch()));
+        }
+
+        return result;
+    }
+
 
     public Tag getTagById(Long id){
         return tagRepository
