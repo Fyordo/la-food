@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -146,9 +147,23 @@ public class DishServiceTest {
             dishFilter.setSearch("1");
             var result = dishService.getDishes(dishFilter);
             assertEquals(1, result.size());
+
+            TagCreateRequest dataTag = new TagCreateRequest(
+                    "TEST_TAG", "#000000", "#000000"
+            );
+            Tag resultTag = tagService.createTag(dataTag);
+            dishService.addTagToDish(resultTag.getId(), dish1.getId());
+            dishService.addTagToDish(resultTag.getId(), dish2.getId());
+
+            dishFilter.setSearch(null);
+            dishFilter.setTagIds(List.of(resultTag.getId()));
+            result = dishService.getDishes(dishFilter);
+            assertEquals(2, result.size());
+
             dishService.deleteDishById(dish1.getId());
             dishService.deleteDishById(dish2.getId());
             dishService.deleteDishById(dish3.getId());
+            tagService.deleteTagById(resultTag.getId());
         }
     }
 

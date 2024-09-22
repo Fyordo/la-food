@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -124,6 +125,7 @@ public class IngredientServiceTest {
         try (MockedStatic<WorkspaceUtils> mockedStatic = Mockito.mockStatic(WorkspaceUtils.class)) {
             mockedStatic.when(WorkspaceUtils::getUserId).thenReturn(1L);
             IngredientFilter ingredientFilter = new IngredientFilter(Map.of());
+
             IngredientCreateRequest data = new IngredientCreateRequest(
                     "TEST_TITLE_1", "TEST_DESCRIPTION"
             );
@@ -140,9 +142,24 @@ public class IngredientServiceTest {
             ingredientFilter.setSearch("1");
             var result = ingredientService.getIngredients(ingredientFilter);
             assertEquals(1, result.size());
+
+
+            TagCreateRequest dataTag = new TagCreateRequest(
+                    "TEST_TAG", "#000000", "#000000"
+            );
+            Tag resultTag = tagService.createTag(dataTag);
+            ingredientFilter.setSearch(null);
+            ingredientService.addTagToIngredient(resultTag.getId(), ingredient1.getId());
+            ingredientService.addTagToIngredient(resultTag.getId(), ingredient2.getId());
+
+            ingredientFilter.setTagIds(List.of(resultTag.getId()));
+            result = ingredientService.getIngredients(ingredientFilter);
+
+            assertEquals(2, result.size());
             ingredientService.deleteIngredientById(ingredient1.getId());
             ingredientService.deleteIngredientById(ingredient2.getId());
             ingredientService.deleteIngredientById(ingredient3.getId());
+            tagService.deleteTagById(resultTag.getId());
         }
     }
 
